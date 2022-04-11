@@ -1,0 +1,12 @@
+D:\Projects\C#Soundboard\prod\CSSoundboard.exe
+D:\Projects\C#Soundboard\prod\CSSoundboard.dll
+D:\Projects\C#Soundboard\prod\CSSoundboard.deps.json
+D:\Projects\C#Soundboard\prod\CSSoundboard.runtimeconfig.json
+D:\Projects\C#Soundboard\prod\CSSoundboard.pdb
+D:\Projects\C#Soundboard\prod\NAudio.dll
+D:\Projects\C#Soundboard\prod\NAudio.Asio.dll
+D:\Projects\C#Soundboard\prod\NAudio.Core.dll
+D:\Projects\C#Soundboard\prod\NAudio.Midi.dll
+D:\Projects\C#Soundboard\prod\NAudio.Wasapi.dll
+D:\Projects\C#Soundboard\prod\NAudio.WinForms.dll
+D:\Projects\C#Soundboard\prod\NAudio.WinMM.dll

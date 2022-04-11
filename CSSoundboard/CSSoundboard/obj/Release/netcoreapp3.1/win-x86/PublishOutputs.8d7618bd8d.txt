@@ -1,0 +1,2 @@
+D:\Projects\C#Soundboard\produktion-ready\CSSoundboard.pdb
+D:\Projects\C#Soundboard\produktion-ready\CSSoundboard.exe

@@ -1,0 +1,2 @@
+D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\bin\Release\netcoreapp3.1\win-x64\publish\CSSoundboard.pdb
+D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\bin\Release\netcoreapp3.1\win-x64\publish\CSSoundboard.exe
