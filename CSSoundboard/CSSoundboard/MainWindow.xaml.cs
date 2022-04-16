@@ -25,10 +25,10 @@ namespace CSSoundboard
         private string btnName;
 #pragma warning disable IDE0044 // Modifizierer "readonly" hinzufügen
         private string soundspath;
+        private Button[] hotkeyBtnArray = { null, null, null, null, null, null, null, null, null, null };
 #pragma warning restore IDE0044 // Modifizierer "readonly" hinzufügen
         private FileInfo[] files;
         private Button[] btnArray;
-        private Button[] hotkeyBtnArray = {null, null, null, null, null, null, null, null, null, null};
         private WaveOut waveOut;
         private WaveOut waveOutclient;
         private bool alreadyplaying = false;
