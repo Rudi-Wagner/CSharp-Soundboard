@@ -119,6 +119,7 @@ namespace CSSoundboard
                 status.Content = "Playing: " + btnName;                         //Display current playing sound
                 alreadyplaying = true;                                          //Update Variable
                 PlaySound(btnName);                                             //Start Method
+                RefreshData(null, null);
             }
         }
 
@@ -402,7 +403,6 @@ namespace CSSoundboard
 
         private void Window_Settings(object sender, MouseButtonEventArgs e)
         {
-            settings = new SettingsWindow();
             settings.Show();
         }
     }

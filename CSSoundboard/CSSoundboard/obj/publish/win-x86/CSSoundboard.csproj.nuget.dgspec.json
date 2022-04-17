@@ -52,9 +52,13 @@
               "target": "Package",
               "version": "[2.0.1, )"
             },
+            "NHotkey.Wpf": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
             "System.Management": {
               "target": "Package",
-              "version": "[5.0.0, )"
+              "version": "[6.0.0, )"
             },
             "VideoLibrary": {
               "target": "Package",
@@ -74,15 +78,15 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
-              "version": "[3.1.19, 3.1.19]"
+              "version": "[3.1.24, 3.1.24]"
             },
             {
               "name": "Microsoft.NETCore.App.Runtime.win-x86",
-              "version": "[3.1.19, 3.1.19]"
+              "version": "[3.1.24, 3.1.24]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
-              "version": "[3.1.19, 3.1.19]"
+              "version": "[3.1.24, 3.1.24]"
             }
           ],
           "frameworkReferences": {
@@ -93,7 +97,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

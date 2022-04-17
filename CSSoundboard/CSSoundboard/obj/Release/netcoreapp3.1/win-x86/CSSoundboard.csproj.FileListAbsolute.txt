@@ -508,10 +508,12 @@ D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\obj\Release\netcoreapp3.1\win
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\obj\Release\netcoreapp3.1\win-x86\CSSoundboard.pdb
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\obj\Release\netcoreapp3.1\win-x86\CSSoundboard.csproj.AssemblyReference.cache
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\bin\Release\netcoreapp3.1\win-x86\System.Management.dll
-D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\bin\Release\netcoreapp3.1\win-x86\mscordaccore_x86_x86_4.700.21.41101.dll
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\obj\Release\netcoreapp3.1\win-x86\SettingsWindow.g.cs
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\obj\Release\netcoreapp3.1\win-x86\SettingsWindow.baml
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\bin\Release\netcoreapp3.1\win-x86\MediaToolkit.dll
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\bin\Release\netcoreapp3.1\win-x86\Newtonsoft.Json.dll
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\bin\Release\netcoreapp3.1\win-x86\NiL.JS.dll
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\bin\Release\netcoreapp3.1\win-x86\libvideo.dll
+D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\bin\Release\netcoreapp3.1\win-x86\NHotkey.dll
+D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\bin\Release\netcoreapp3.1\win-x86\NHotkey.Wpf.dll
+D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\bin\Release\netcoreapp3.1\win-x86\mscordaccore_x86_x86_4.700.22.16002.dll

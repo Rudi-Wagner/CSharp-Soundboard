@@ -208,6 +208,30 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
+      "NHotkey/2.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.0/NHotkey.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/NHotkey.dll": {}
+        }
+      },
+      "NHotkey.Wpf/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "NHotkey": "2.1.0"
+        },
+        "compile": {
+          "lib/netcoreapp3.0/NHotkey.Wpf.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/NHotkey.Wpf.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
       "NiL.JS/2.5.1514": {
         "type": "package",
         "compile": {
@@ -416,13 +440,16 @@
           "lib/netstandard1.1/System.Buffers.dll": {}
         }
       },
-      "System.CodeDom/5.0.0": {
+      "System.CodeDom/6.0.0": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/System.CodeDom.dll": {}
+          "lib/netstandard2.0/System.CodeDom.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/System.CodeDom.dll": {}
+        },
+        "build": {
+          "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
       "System.Collections/4.3.0": {
@@ -704,21 +731,23 @@
           "lib/netstandard1.6/System.Linq.Expressions.dll": {}
         }
       },
-      "System.Management/5.0.0": {
+      "System.Management/6.0.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "5.0.0",
           "Microsoft.Win32.Registry": "5.0.0",
-          "System.CodeDom": "5.0.0"
+          "System.CodeDom": "6.0.0"
         },
         "compile": {
-          "ref/netstandard2.0/System.Management.dll": {}
+          "lib/netcoreapp3.1/System.Management.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/System.Management.dll": {}
+          "lib/netcoreapp3.1/System.Management.dll": {}
+        },
+        "build": {
+          "buildTransitive/netcoreapp3.1/_._": {}
         },
         "runtimeTargets": {
-          "runtimes/win/lib/netcoreapp2.0/System.Management.dll": {
+          "runtimes/win/lib/netcoreapp3.1/System.Management.dll": {
             "assetType": "runtime",
             "rid": "win"
           }
@@ -1611,6 +1640,30 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
+      "NHotkey/2.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.0/NHotkey.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/NHotkey.dll": {}
+        }
+      },
+      "NHotkey.Wpf/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "NHotkey": "2.1.0"
+        },
+        "compile": {
+          "lib/netcoreapp3.0/NHotkey.Wpf.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/NHotkey.Wpf.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
       "NiL.JS/2.5.1514": {
         "type": "package",
         "compile": {
@@ -2042,13 +2095,16 @@
           "lib/netstandard1.1/System.Buffers.dll": {}
         }
       },
-      "System.CodeDom/5.0.0": {
+      "System.CodeDom/6.0.0": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/System.CodeDom.dll": {}
+          "lib/netstandard2.0/System.CodeDom.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/System.CodeDom.dll": {}
+        },
+        "build": {
+          "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
       "System.Collections/4.3.0": {
@@ -2325,18 +2381,20 @@
           "lib/netstandard1.6/System.Linq.Expressions.dll": {}
         }
       },
-      "System.Management/5.0.0": {
+      "System.Management/6.0.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "5.0.0",
           "Microsoft.Win32.Registry": "5.0.0",
-          "System.CodeDom": "5.0.0"
+          "System.CodeDom": "6.0.0"
         },
         "compile": {
-          "ref/netstandard2.0/System.Management.dll": {}
+          "lib/netcoreapp3.1/System.Management.dll": {}
         },
         "runtime": {
-          "runtimes/win/lib/netcoreapp2.0/System.Management.dll": {}
+          "runtimes/win/lib/netcoreapp3.1/System.Management.dll": {}
+        },
+        "build": {
+          "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
       "System.Net.Http/4.3.0": {
@@ -3277,6 +3335,40 @@
         "packageIcon.png"
       ]
     },
+    "NHotkey/2.1.0": {
+      "sha512": "zr6ngoY5OujU8zhp8DGZF4I10HSrHjOuiXw9LdXaplXdOJPxwbYPvIDacGtsTCnLLSZDTF+lwjDpdr+bnntRdw==",
+      "type": "package",
+      "path": "nhotkey/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/NHotkey.dll",
+        "lib/net40/NHotkey.pdb",
+        "lib/net45/NHotkey.dll",
+        "lib/net45/NHotkey.pdb",
+        "lib/netcoreapp3.0/NHotkey.dll",
+        "lib/netcoreapp3.0/NHotkey.pdb",
+        "nhotkey.2.1.0.nupkg.sha512",
+        "nhotkey.nuspec"
+      ]
+    },
+    "NHotkey.Wpf/2.1.0": {
+      "sha512": "rDanPmRtx8c8/eKSqxhCXf6N9JanEAdIaW+FA9fRKda7TBVRNXXXPyU05s5O614KBhvm9a0YGjS9wfhqNPwi6A==",
+      "type": "package",
+      "path": "nhotkey.wpf/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/NHotkey.Wpf.dll",
+        "lib/net40/NHotkey.Wpf.pdb",
+        "lib/net45/NHotkey.Wpf.dll",
+        "lib/net45/NHotkey.Wpf.pdb",
+        "lib/netcoreapp3.0/NHotkey.Wpf.dll",
+        "lib/netcoreapp3.0/NHotkey.Wpf.pdb",
+        "nhotkey.wpf.2.1.0.nupkg.sha512",
+        "nhotkey.wpf.nuspec"
+      ]
+    },
     "NiL.JS/2.5.1514": {
       "sha512": "cEzf7GxP07LjdJveL5gkBS8oFI7PmK6QrRJUicj9iMxDl0LRhLOv/xhLgTjEOg0KJGrZg9wQLWaVB1eojxD0+A==",
       "type": "package",
@@ -4166,28 +4258,27 @@
         "system.buffers.nuspec"
       ]
     },
-    "System.CodeDom/5.0.0": {
-      "sha512": "JPJArwA1kdj8qDAkY2XGjSWoYnqiM7q/3yRNkt6n28Mnn95MuEGkZXUbPBf7qc3IjwrGY5ttQon7yqHZyQJmOQ==",
+    "System.CodeDom/6.0.0": {
+      "sha512": "CPc6tWO1LAer3IzfZufDBRL+UZQcj5uS207NHALQzP84Vp/z6wF0Aa0YZImOQY8iStY0A2zI/e3ihKNPfUm8XA==",
       "type": "package",
-      "path": "system.codedom/5.0.0",
+      "path": "system.codedom/6.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/netcoreapp2.0/System.CodeDom.targets",
+        "buildTransitive/netcoreapp3.1/_._",
         "lib/net461/System.CodeDom.dll",
         "lib/net461/System.CodeDom.xml",
+        "lib/net6.0/System.CodeDom.dll",
+        "lib/net6.0/System.CodeDom.xml",
         "lib/netstandard2.0/System.CodeDom.dll",
         "lib/netstandard2.0/System.CodeDom.xml",
-        "ref/net461/System.CodeDom.dll",
-        "ref/net461/System.CodeDom.xml",
-        "ref/netstandard2.0/System.CodeDom.dll",
-        "ref/netstandard2.0/System.CodeDom.xml",
-        "system.codedom.5.0.0.nupkg.sha512",
+        "system.codedom.6.0.0.nupkg.sha512",
         "system.codedom.nuspec",
-        "useSharedDesignerContext.txt",
-        "version.txt"
+        "useSharedDesignerContext.txt"
       ]
     },
     "System.Collections/4.3.0": {
@@ -5171,29 +5262,32 @@
         "system.linq.expressions.nuspec"
       ]
     },
-    "System.Management/5.0.0": {
-      "sha512": "MF1CHaRcC+MLFdnDthv4/bKWBZnlnSpkGqa87pKukQefgEdwtb9zFW6zs0GjPp73qtpYYg4q6PEKbzJbxCpKfw==",
+    "System.Management/6.0.0": {
+      "sha512": "sHsESYMmPDhQuOC66h6AEOs/XowzKsbT9srMbX71TCXP58hkpn1BqBjdmKj1+DCA/WlBETX1K5WjQHwmV0Txrg==",
       "type": "package",
-      "path": "system.management/5.0.0",
+      "path": "system.management/6.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
-        "lib/net45/_._",
+        "buildTransitive/netcoreapp2.0/System.Management.targets",
+        "buildTransitive/netcoreapp3.1/_._",
+        "lib/net461/_._",
+        "lib/net6.0/System.Management.dll",
+        "lib/net6.0/System.Management.xml",
+        "lib/netcoreapp3.1/System.Management.dll",
+        "lib/netcoreapp3.1/System.Management.xml",
         "lib/netstandard2.0/System.Management.dll",
         "lib/netstandard2.0/System.Management.xml",
-        "ref/net45/_._",
-        "ref/netstandard2.0/System.Management.dll",
-        "ref/netstandard2.0/System.Management.xml",
-        "runtimes/win/lib/net45/_._",
-        "runtimes/win/lib/netcoreapp2.0/System.Management.dll",
-        "runtimes/win/lib/netcoreapp2.0/System.Management.xml",
-        "system.management.5.0.0.nupkg.sha512",
+        "runtimes/win/lib/net6.0/System.Management.dll",
+        "runtimes/win/lib/net6.0/System.Management.xml",
+        "runtimes/win/lib/netcoreapp3.1/System.Management.dll",
+        "runtimes/win/lib/netcoreapp3.1/System.Management.xml",
+        "system.management.6.0.0.nupkg.sha512",
         "system.management.nuspec",
-        "useSharedDesignerContext.txt",
-        "version.txt"
+        "useSharedDesignerContext.txt"
       ]
     },
     "System.Net.Http/4.3.0": {
@@ -7317,7 +7411,8 @@
     ".NETCoreApp,Version=v3.1": [
       "MediaToolkit >= 1.1.0.1",
       "NAudio >= 2.0.1",
-      "System.Management >= 5.0.0",
+      "NHotkey.Wpf >= 2.1.0",
+      "System.Management >= 6.0.0",
       "VideoLibrary >= 3.1.9"
     ]
   },
@@ -7373,9 +7468,13 @@
             "target": "Package",
             "version": "[2.0.1, )"
           },
+          "NHotkey.Wpf": {
+            "target": "Package",
+            "version": "[2.1.0, )"
+          },
           "System.Management": {
             "target": "Package",
-            "version": "[5.0.0, )"
+            "version": "[6.0.0, )"
           },
           "VideoLibrary": {
             "target": "Package",
@@ -7395,15 +7494,15 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
-            "version": "[3.1.19, 3.1.19]"
+            "version": "[3.1.24, 3.1.24]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-x86",
-            "version": "[3.1.19, 3.1.19]"
+            "version": "[3.1.24, 3.1.24]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
-            "version": "[3.1.19, 3.1.19]"
+            "version": "[3.1.24, 3.1.24]"
           }
         ],
         "frameworkReferences": {
@@ -7414,7 +7513,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
