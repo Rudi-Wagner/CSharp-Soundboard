@@ -281,9 +281,12 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Image Source="/Resources/CloseX.png"    MouseLeftButtonDown="Window_Shutdown" Height="30" Width="30" Grid.Column="2" Margin="5,5,5,5"    HorizontalAlignment="Right"/>
-        <Image Source="/SettingsO.png"           MouseLeftButtonDown="Window_Settings" Height="30" Width="30" Grid.Column="2" Margin="5,5,85,5" HorizontalAlignment="Right"/>
-        <Image Source="/Resources/Minimize_.png" MouseLeftButtonDown="Window_Minimize" Height="30" Width="30" Grid.Column="2" Margin="5,5,45,5"  HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <Image Source="/Resources/CloseX.png"    MouseLeftButtonDown="Window_Shutdown" Height="30" Width="30" Grid.Column="2" Margin="5,5,5,5"  HorizontalAlignment="Right"
+               ToolTip = "Terminate this programm."/>
+        <Image Source="/SettingsO.png"           MouseLeftButtonDown="Window_Settings" Height="30" Width="30" Grid.Column="2" Margin="5,5,85,5" HorizontalAlignment="Right"
+               ToolTip = "Open the settings window."/>
+        <Image Source="/Resources/Minimize_.png" MouseLeftButtonDown="Window_Minimize" Height="30" Width="30" Grid.Column="2" Margin="5,5,45,5" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+               ToolTip = "Minimize this programm."/>
 
         <Image Source="/Resources/Icon.ico" Height="30" Width="30" Margin="5" HorizontalAlignment="Left" Panel.ZIndex="1"/>
         <Label Content="C# Soundboard" Grid.Row="0" Grid.Column="0" 
@@ -297,25 +300,26 @@
                HorizontalContentAlignment="Center" Background="#2f3136" Foreground="#99aab5"/>
 
         <Separator Grid.Row="0" Grid.Column="0" BorderThickness="1"
-                   BorderBrush="Black" Grid.ColumnSpan="3" Margin="0,0,0,-40"/>
+                   BorderBrush="Black" Grid.ColumnSpan="3" Margin="-5,0,5,33" Grid.RowSpan="2"/>
 
-        <Label x:Name="status" Content="Playing: " Grid.Row="1" 
-               Grid.Column="0" BorderThickness="1.5" FontWeight="SemiBold"
-               BorderBrush="#131516" Margin="10"
-               VerticalContentAlignment="Center" Background="#2f3136" Foreground="#99aab5"/>
+        <Label x:Name="status" Content="Playing: " Grid.Row="1"  Grid.Column="0" BorderThickness="1.5" FontWeight="SemiBold" BorderBrush="#131516" Margin="10"
+               ToolTip="Shows the current playing sound." VerticalContentAlignment="Center" Background="#2f3136" Foreground="#99aab5"/>
 
-        <Button Content="Refresh" Click="RefreshData" Margin="10,10,170,10" Grid.Row="2" Background="#2f3136" Foreground="#99aab5" BorderBrush="#131516"/>
-        <Button x:Name="Stop" Content="Stop" Click="StopMusic" Margin="170,10,10,10" Grid.Row="2" Background="#2f3136" Foreground="#99aab5" BorderBrush="#131516"/>
+        <Button Content="Refresh" Click="RefreshData" Margin="10,10,170,10" Grid.Row="2" Background="#2f3136" Foreground="#99aab5" BorderBrush="#131516"
+                ToolTip="Refresh all contents of the window."/>
+        <Button x:Name="Stop" Content="Stop" Click="StopMusic" Margin="170,10,10,10" Grid.Row="2" Background="#2f3136" Foreground="#99aab5" BorderBrush="#131516"
+                ToolTip="Stop the sound that is currently playing."/>
 
-        <Label x:Name="volslider" Content="Volume: 5" Grid.Row="2" Grid.Column="3" Margin="5,0,5,5" Foreground="#99aab5"/>
+        <Label x:Name="volslider" Content="Volume: 5" Grid.Row="2" Grid.Column="3" Margin="5,0,5,5" Foreground="#99aab5"
+               ToolTip="Adjust the volume of the sound replay."/>
         <Slider Style="{StaticResource Horizontal_Slider}" x:Name="slider" ValueChanged="GetVolume" Value="2.5" Grid.Column="3" Margin="10,35,10,10" Grid.Row="2" Foreground="#99aab5" Panel.ZIndex="1"/>
 
 
         <Label Content="Delay in ms: " Grid.Column="1" HorizontalAlignment="Left" 
                Margin="5.2,0,0,0" Grid.Row="2" VerticalAlignment="Top" Background="#36393f" Foreground="#99aab5"/>
         <TextBox x:Name="delay" Grid.Column="1" Grid.Row="2" BorderThickness="1" BorderBrush="#131516"
-                 Margin="10,30,10,10" PreviewTextInput="PreviewTextInput"
-                 Background="#2f3136" Foreground="#99aab5"/>
+                 ToolTip="Use a delay to play the sound a bit later."
+                 Margin="10,30,10,10" PreviewTextInput="PreviewTextInput" Background="#2f3136" Foreground="#99aab5"/>
 
         <Label x:Name="lbl" Content="No Sounds were found!!" Grid.Column="2" Grid.Row="3" 
                HorizontalAlignment="Center" VerticalContentAlignment="Center"

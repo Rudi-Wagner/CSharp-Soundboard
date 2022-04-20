@@ -43,3 +43,4 @@ D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\obj\Release\netcoreapp3.1\CSS
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\obj\Release\netcoreapp3.1\CSSoundboard.dll
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\obj\Release\netcoreapp3.1\CSSoundboard.pdb
 D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\obj\Release\netcoreapp3.1\CSSoundboard.genruntimeconfig.cache
+D:\Projects\C#Soundboard\CSSoundboard\CSSoundboard\obj\Release\netcoreapp3.1\CSSoundboard.csproj.AssemblyReference.cache

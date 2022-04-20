@@ -19,10 +19,14 @@ namespace CSSoundboard
     {
         private string log = "";
         private string[] audioOutput = new string[WaveOut.DeviceCount];
-        private string projectFolder = Directory.GetCurrentDirectory();
-        public SettingsWindow()
+        private readonly string projectFolder = Directory.GetCurrentDirectory();
+        private string[] alreadySet = { null, null, null, null, null, null, null, null, null, null };
+        private MainWindow mainWindow;
+        public SettingsWindow(MainWindow main)
         {
             log += "#Settings# STARTING\n";
+
+            mainWindow = main;
             //Initalize WindowComponents
             InitializeComponent();
             MMDeviceEnumerator enumerator = new MMDeviceEnumerator();          //create enumerator
@@ -41,33 +45,37 @@ namespace CSSoundboard
 
         private void RedoFilledBoxes()
         {
-            TextBox[] boxes = { Hotkey0, Hotkey1, Hotkey2, Hotkey3, Hotkey4, Hotkey5, Hotkey6, Hotkey7, Hotkey8, Hotkey9};
-            string[] alreadySet = { null, null, null, null, null, null, null, null, null, null };
+            TextBox[] boxes = { Hotkey0, Hotkey1, Hotkey2, Hotkey3, Hotkey4, Hotkey5, Hotkey6, Hotkey7, Hotkey8, Hotkey9 };
 
             string soundspath = projectFolder + @"\Sounds";
             DirectoryInfo directory = new DirectoryInfo(soundspath);
             FileInfo[] files = directory.GetFiles("Hotkey*.mp3");
 
+        
             //Retrieve set hotkeys
             for (int i = 0; i < files.Length; i++)
             {
                 string content = files[i].Name;
-                //content = content.Replace(".mp3", "");
-                int number = int.Parse(content.Substring(6, 1));
+                int number = int.Parse(content.Substring(6, 1));        //Get Number of the Field
+                content = content.Replace(".mp3", "");                  //Remove the filetype
+                content = content.Substring(8);                         //Remove the starting argument "HotkeyX#"
+                int maxLength = 13;
+                if (content.Length <= 13)
+                {
+                    maxLength = content.Length;
+                }
+                content = content.Substring(0, maxLength);              //Cut the string to a max length
+
                 alreadySet[number] = content;
             }
 
+            
             //Place HotkeySounds in boxes
             for (int i = 0; i < boxes.Length; i++)
             {
                 if (alreadySet[i] != null)
                 {
-                    int maxLength = 13;
-                    if (boxes[i].Name.Length < 13)
-                    {
-                        maxLength = boxes[i].Name.Length;
-                    }
-                    boxes[i].Text = boxes[i].Name + System.Environment.NewLine + alreadySet[i].Substring(8, maxLength).Replace(".mp3", "");
+                    boxes[i].Text = boxes[i].Name + Environment.NewLine + alreadySet[i];
                 }
                 else
                 {
@@ -156,15 +164,11 @@ namespace CSSoundboard
         }
 
         //Window Functions
-        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            this.Hide();
-        }
-
         private void Window_Shutdown(object sender, RoutedEventArgs e)
         {//Shutdown Program
             log += "#Settings# Settings Shutdown\n";
             WriteOutput(log);
+            mainWindow.RefreshData(null, null);
             this.Hide();
         }
 
@@ -175,7 +179,7 @@ namespace CSSoundboard
             TextWriter oldOut = Console.Out;
             try
             {
-                ostrm = new FileStream("./log.txt", FileMode.OpenOrCreate, FileAccess.Write);
+                ostrm = new FileStream("./settingslog.txt", FileMode.OpenOrCreate, FileAccess.Write);
                 writer = new StreamWriter(ostrm);
             }
             catch (Exception e)
@@ -272,5 +276,10 @@ namespace CSSoundboard
             }
         }
 
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            FillHotkeysList();
+            RedoFilledBoxes();
+        }
     }
 }

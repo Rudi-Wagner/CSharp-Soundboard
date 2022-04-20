@@ -33,14 +33,16 @@ namespace CSSoundboard
         private WaveOut waveOutclient;
         private bool alreadyplaying = false;
         private string log = "";
-        private SettingsWindow settings = new SettingsWindow();
+        private SettingsWindow settings;
 
         private string audioOutput;
         private int audioOutputID = 999;
         private float vol = 2.5f;
         public MainWindow()
         {
-            log += "#Log# STARTING\n";
+            log += $"#Log# STARTING {DateTime.Now.ToString("HH:mm:ss")}\n";
+
+            settings = new SettingsWindow(this);
 
             //Initalize WindowComponents
             InitializeComponent();
@@ -264,6 +266,7 @@ namespace CSSoundboard
             btn.Background = (Brush)bc.ConvertFrom("#2c2f33");                  //Set Background Colour
             btn.Foreground = (Brush)bc.ConvertFrom("#99aab5");                  //Set Foreground Colour
             btn.BorderBrush = (Brush)bc.ConvertFrom("#f34b43");                 //Set Border Coulour
+            btn.ToolTip = "Click to play this Sound. Or use a Hotkey!";
             btnArray[arrayplacment] = btn;                                      //Save Button to array
             scrollViewerWrapperPanel.Children.Add(btn);                                            //Add Button to Window
             log += "#Log# Created Button: " + str + "\n";
@@ -271,7 +274,7 @@ namespace CSSoundboard
 
         private void SetHotkeys()
         {
-            log += "#Log# Set Hotkeys";
+            log += "#Log# Set Hotkeys\n";
 
             HotkeyManager.Current.Remove("Stop");
             HotkeyManager.Current.AddOrReplace("Stop", Key.Divide, ModifierKeys.None, StopHotkey);
@@ -321,13 +324,15 @@ namespace CSSoundboard
             btn.Background = (Brush)bc.ConvertFrom("#2c2f33");                  //Set Background Colour
             btn.Foreground = (Brush)bc.ConvertFrom("#99aab5");                  //Set Foreground Colour
             btn.BorderBrush = (Brush)bc.ConvertFrom("#131516");                 //Set Border Coulour
+            btn.ToolTip = "Click to play this Sound.";
             btnArray[arrayplacment] = btn;                                      //Save Button to array
             scrollViewerWrapperPanel.Children.Add(btn);                         //Add Button to Window
             log += "#Log# Created Button: " + str + "\n";
         }
 
-        private void RefreshData(object sender, RoutedEventArgs e)
-        {//Refresh Button Data
+        public void RefreshData(object sender, RoutedEventArgs e)
+        {
+            //Refresh Button Data
             for (int i = 0; i < files.Length; i++)
             {
                 scrollViewerWrapperPanel.Children.Remove(btnArray[i]);                             //Remove all Buttons from Window
