@@ -46,7 +46,11 @@ namespace CSSoundboard
         private void RedoFilledBoxes()
         {
             TextBox[] boxes = { Hotkey0, Hotkey1, Hotkey2, Hotkey3, Hotkey4, Hotkey5, Hotkey6, Hotkey7, Hotkey8, Hotkey9 };
-
+            for (int i = 0; i < alreadySet.Length; i++)
+            {
+                alreadySet[i] = null;
+            }
+            
             string soundspath = projectFolder + @"\Sounds";
             DirectoryInfo directory = new DirectoryInfo(soundspath);
             FileInfo[] files = directory.GetFiles("Hotkey*.mp3");
@@ -76,10 +80,12 @@ namespace CSSoundboard
                 if (alreadySet[i] != null)
                 {
                     boxes[i].Text = boxes[i].Name + Environment.NewLine + alreadySet[i];
+                    boxes[i].IsReadOnly = true;
                 }
                 else
                 {
                     boxes[i].Text = boxes[i].Name;
+                    boxes[i].IsReadOnly = false;
                 }
             }
         }
@@ -232,20 +238,32 @@ namespace CSSoundboard
                     maxLength = dragData.Length;
                 }
 
-                box.Text = box.Name + System.Environment.NewLine + dragData.Substring(0, maxLength);
-                ActivateHotkey(box.Name, dragData);
+                if (!ActivateHotkey(box.Name, dragData))
+                {
+                    box.Text = box.Name;
+                    return;
+                }
+                box.Text = box.Name + Environment.NewLine + dragData.Substring(0, maxLength);
+                
                 RedoFilledBoxes();
+                box.IsReadOnly = true;
             }catch (FileNotFoundException)
             { 
                 //Nothing
             }
         }
 
-        private void ActivateHotkey(string hotkeyNr, string fileName)
+        private bool ActivateHotkey(string hotkeyNr, string fileName)
         {//Update the Filename to set/activate the Hotkeys
-            string soundspath = projectFolder + @"\Sounds";
-            DirectoryInfo directory = new DirectoryInfo(soundspath);
-            File.Move($"{directory}/{fileName}.mp3", $"{soundspath}/{hotkeyNr}#{fileName}.mp3");
+            try {
+                string soundspath = projectFolder + @"\Sounds";
+                DirectoryInfo directory = new DirectoryInfo(soundspath);
+                File.Move($"{directory}/{fileName}.mp3", $"{soundspath}/{hotkeyNr}#{fileName}.mp3");
+                return true;
+            }catch (FileNotFoundException)
+            {
+                return false;
+            }
         }
 
         private void DeactivateHotkey(int hotkeyNr, string fileName)
@@ -267,6 +285,7 @@ namespace CSSoundboard
         private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             TextBox box = sender as TextBox;
+            box.IsReadOnly = false;
             if (box.Text.Length >= 10)
             {
                 int nr = int.Parse(box.Name.Substring(6, 1));
