@@ -19,11 +19,11 @@
     <Window.Resources>
         <!-- Scrollbar -->
         <!-- Brushes used in Styling of ScrollViewer -->
-        
+
         <SolidColorBrush x:Key="NormalBrush" Color="#FF212225" />
         <SolidColorBrush x:Key="NormalBorderBrush" Color="#FF212225" />
         <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
-        
+
 
         <!-- SrollViewer ScrollBar Repeat Buttons (at each end) -->
         <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
@@ -31,32 +31,32 @@
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Setter Property="Focusable" Value="false"/>
             <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type RepeatButton}">
-                    <Border
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border
                       Name="Border"
                       Margin="1"
                       CornerRadius="2"
                       Background="{StaticResource NormalBrush}"
                       BorderBrush="{StaticResource NormalBorderBrush}"
                       BorderThickness="1">
-                      <Path
+                            <Path
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Fill="{StaticResource GlyphBrush}"
                         Data="{Binding Path=Content,
                             RelativeSource={RelativeSource TemplatedParent}}" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsPressed" Value="true">
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="true">
                                 <Setter TargetName="Border" Property="Background" Value="{StaticResource NormalBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
                                 <Setter Property="Foreground" Value="{StaticResource NormalBrush}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
             </Setter>
         </Style>
         <!-- SrollViewer ScrollBar Repeat Buttons (The part in the middle, 
@@ -82,15 +82,15 @@
             <Setter Property="IsTabStop" Value="false"/>
             <Setter Property="Focusable" Value="false"/>
             <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border
                       CornerRadius="2"
                       Background="{StaticResource NormalBrush}"
                       BorderBrush="{StaticResource NormalBrush}"
                       BorderThickness="1" />
-                </ControlTemplate>
-            </Setter.Value>
+                    </ControlTemplate>
+                </Setter.Value>
             </Setter>
         </Style>
 
@@ -137,25 +137,25 @@
                   Command="ScrollBar.LineDownCommand"
                   Content="M 0 0 L 4 4 L 8 0 Z"/>
             </Grid>
-            </ControlTemplate>
-        
+        </ControlTemplate>
+
         <!-- Style for overall  ScrollBar -->
-            <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
-                <Setter Property="SnapsToDevicePixels" Value="True"/>
-                <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Style.Triggers>
                 <Trigger Property="Orientation" Value="Vertical">
-                        <Setter Property="Width" Value="18"/>
-                        <Setter Property="Height" Value="Auto" />
-                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
+                    <Setter Property="Width" Value="18"/>
+                    <Setter Property="Height" Value="Auto" />
+                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-            <!-- Style for overall  ScrollViewer -->
-            <Style x:Key="FavsScrollViewer" TargetType="{x:Type ScrollViewer}">
-                <Setter Property="OverridesDefaultStyle" Value="True"/>
-                <Setter Property="Template">
+        <!-- Style for overall  ScrollViewer -->
+        <Style x:Key="FavsScrollViewer" TargetType="{x:Type ScrollViewer}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ScrollViewer}">
                         <Grid>
@@ -178,8 +178,8 @@
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
-                </Setter>
-            </Style>
+            </Setter>
+        </Style>
 
 
         <!-- Volume Slider -->
@@ -299,8 +299,8 @@
                VerticalContentAlignment="Center" FontWeight="SemiBold"
                HorizontalContentAlignment="Center" Background="#2f3136" Foreground="#99aab5"/>
 
-        <Separator Grid.Row="0" Grid.Column="0" BorderThickness="1"
-                   BorderBrush="Black" Grid.ColumnSpan="3" Margin="-5,0,5,33" Grid.RowSpan="2"/>
+        <Separator Grid.Row="0" Grid.Column="0" BorderThickness="1" 
+                   BorderBrush="Black" Grid.ColumnSpan="3" Margin="-5,0,5,36" Grid.RowSpan="2"/>
 
         <Label x:Name="status" Content="Playing: " Grid.Row="1"  Grid.Column="0" BorderThickness="1.5" FontWeight="SemiBold" BorderBrush="#131516" Margin="10"
                ToolTip="Shows the current playing sound." VerticalContentAlignment="Center" Background="#2f3136" Foreground="#99aab5"/>
@@ -331,5 +331,7 @@
         <ScrollViewer x:Name="scrollViewer" Grid.Row="3" Grid.ColumnSpan="3" Margin="5,5,5,10" Grid.RowSpan="7">
             <WrapPanel x:Name="scrollViewerWrapperPanel" />
         </ScrollViewer>
+        <Button x:Name="AddSounds" Content="AddSounds" Click="OpenSoundsFolder" Margin="170,10,10,10" Grid.Row="1" Background="#2f3136" Foreground="#99aab5" BorderBrush="#131516"
+            ToolTip="Add a new Sound." Grid.Column="2"/>
     </Grid>
 </Window>

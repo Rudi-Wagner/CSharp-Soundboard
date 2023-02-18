@@ -9,6 +9,7 @@ using MediaToolkit.Model;
 using MediaToolkit;
 using System.Threading;
 using System.Windows.Controls;
+using System.Threading.Tasks;
 
 namespace CSSoundboard
 {
@@ -19,9 +20,10 @@ namespace CSSoundboard
     {
         private string log = "";
         private string[] audioOutput = new string[WaveOut.DeviceCount];
-        private readonly string projectFolder = Directory.GetCurrentDirectory();
         private string[] alreadySet = { null, null, null, null, null, null, null, null, null, null };
         private MainWindow mainWindow;
+        private string projectFolder;
+        private string soundspath;
         public SettingsWindow(MainWindow main)
         {
             log += "#Settings# STARTING\n";
@@ -38,6 +40,9 @@ namespace CSSoundboard
                 audioOutput[i] = audioOutputName;
             }
 
+            projectFolder = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + @"\Programs\Rudi Wagner";
+            soundspath = projectFolder + @"\Sounds";
+
             FillComboAudioDevices();
             FillHotkeysList();
             RedoFilledBoxes();
@@ -50,8 +55,7 @@ namespace CSSoundboard
             {
                 alreadySet[i] = null;
             }
-            
-            string soundspath = projectFolder + @"\Sounds";
+
             DirectoryInfo directory = new DirectoryInfo(soundspath);
             FileInfo[] files = directory.GetFiles("Hotkey*.mp3");
 
@@ -93,7 +97,6 @@ namespace CSSoundboard
         private void FillHotkeysList()
         {
             hotkeysList.Items.Clear();
-            string soundspath = projectFolder + @"\Sounds";
             DirectoryInfo directory = new DirectoryInfo(soundspath);
             FileInfo[] files = directory.GetFiles("*.mp3");
             for (int i = 0; i < files.Length; i++)                              //Create Button Loop
@@ -125,47 +128,48 @@ namespace CSSoundboard
 
         
 
-        private void SaveMP3(string VideoURL)
+        private String SaveMP3(string VideoURL)
         {
-            new Thread(() =>
+            String status = "";
+            try
             {
-                try
+                log += $"#Settings# Downloading {VideoURL}\n";
+                string projectFolder = Directory.GetCurrentDirectory();
+                string SaveToFolder = projectFolder + @"\Sounds";
+                string source = SaveToFolder;
+
+                var youtube = Client.For(YouTube.Default);
+                var vid = youtube.GetVideo(VideoURL);
+                string videopath = Path.Combine(source, vid.FullName);
+                File.WriteAllBytes(videopath, vid.GetBytes());
+
+                var inputFile = new MediaFile { Filename = Path.Combine(source, vid.FullName) };
+                var outputFile = new MediaFile { Filename = Path.Combine(source, $"{vid.FullName}.mp3") };
+
+                using (var engine = new Engine())
                 {
-                    log += $"#Settings# Downloading {VideoURL}\n";
-                    string projectFolder = Directory.GetCurrentDirectory();
-                    string SaveToFolder = projectFolder + @"\Sounds";
-                    string source = SaveToFolder;
-                    var youtube = YouTube.Default;
-                    var vid = youtube.GetVideo(VideoURL);
-                    string videopath = Path.Combine(source, vid.FullName);
-
-                    File.WriteAllBytes(videopath, vid.GetBytes());
-
-                    var inputFile = new MediaFile { Filename = Path.Combine(source, vid.FullName) };
-                    var outputFile = new MediaFile { Filename = Path.Combine(source, $"{vid.FullName}.mp3") };
-
-                    using (var engine = new Engine())
-                    {
-                        engine.GetMetadata(inputFile);
-                        engine.Convert(inputFile, outputFile);
-                    }
-
-                    File.Delete(Path.Combine(source, vid.FullName));
-                    log += $"#Settings# Saved Sound {vid.FullName}";
-                    Download_Status.Content = "Finished";
+                    engine.GetMetadata(inputFile);
+                    engine.Convert(inputFile, outputFile);
                 }
-                catch (Exception e)
-                {
-                    log += $"#Settings# A Error occured while downloading a video!\n{e}\n";
-                    Download_Status.Content = "Failed!";
-                }
-            }).Start();
+
+                File.Delete(Path.Combine(source, vid.FullName));
+                log += $"#Settings# Saved Sound {vid.FullName}";
+                status = "Finished";
+            }
+            catch (Exception e)
+            {
+                log += $"#Settings# A Error occured while downloading a video!\n{e}\n";
+                status = "Failed";
+            }
+            return status;
         }
 
-        private void Download_Button_Click(object sender, RoutedEventArgs e)
+        private async void Download_Button_Click(object sender, RoutedEventArgs e)
         {
-            Download_Status.Content = "Starting..";
-            SaveMP3(DownloadLinkBox.Text);
+            Download_Status.Content = "Loading...";
+            String url = DownloadLinkBox.Text;
+            String status = await Task.Run(() => SaveMP3(url));
+            Download_Status.Content = status;
             DownloadLinkBox.Text = "Link..";
         }
 
@@ -205,8 +209,17 @@ namespace CSSoundboard
 
         private void Window_Movment(object sender, MouseButtonEventArgs e)
         {//Window movement handler
-            if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
+            try
+            {
+                if (e.ChangedButton == MouseButton.Left)
+                {
+                    this.DragMove();
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                log += ex.Message + "\n";
+            }
         }
 
         //Drag and Drop for the visual Hotkeys
@@ -221,7 +234,11 @@ namespace CSSoundboard
 
         private void HotkeysList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {//Do Drag and Drop OnSelectionChanged
-            DragDrop.DoDragDrop(hotkeysList, hotkeysList.SelectedItem.ToString(), DragDropEffects.Copy);
+            mainWindow.StopMusic(null, null);
+            if (hotkeysList.SelectedItem != null)
+            {
+                DragDrop.DoDragDrop(hotkeysList, hotkeysList.SelectedItem.ToString(), DragDropEffects.Copy);
+            }
         }
 
         private void TextBox_Drop(object sender, DragEventArgs e)
@@ -255,6 +272,7 @@ namespace CSSoundboard
 
         private bool ActivateHotkey(string hotkeyNr, string fileName)
         {//Update the Filename to set/activate the Hotkeys
+            mainWindow.StopMusic(null, null);
             try {
                 string soundspath = projectFolder + @"\Sounds";
                 DirectoryInfo directory = new DirectoryInfo(soundspath);
@@ -268,6 +286,7 @@ namespace CSSoundboard
 
         private void DeactivateHotkey(int hotkeyNr, string fileName)
         {
+            mainWindow.StopMusic(null, null);
             //First get the full name of the file
             string soundspath = projectFolder + @"\Sounds";
             DirectoryInfo directory = new DirectoryInfo(soundspath);
@@ -275,6 +294,9 @@ namespace CSSoundboard
 
             //Update the Filename to set/activate the Hotkeys
             File.Move(directory + "/" + files[0].Name, soundspath + "/" + files[0].Name.Substring(8));
+
+            FillHotkeysList();
+            RedoFilledBoxes();
         }
 
         private void Textbox1_KeyDown(object sender, KeyEventArgs e)

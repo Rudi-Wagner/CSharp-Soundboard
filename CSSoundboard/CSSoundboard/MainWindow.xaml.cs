@@ -23,6 +23,7 @@ namespace CSSoundboard
         //Varibale declaration
         private Button btn;
         private string btnName;
+        private string projectFolder;
         private string soundspath;
         private Button[] hotkeyBtnArray = { null, null, null, null, null, null, null, null, null, null };
         private FileInfo[] files;
@@ -35,7 +36,9 @@ namespace CSSoundboard
         private string log = "";
         private SettingsWindow settings;
 
-        
+        private Mp3FileReader Reader;
+        private Mp3FileReader ReaderClient;
+
         private float vol = 2.5f;
         public MainWindow()
         {
@@ -47,7 +50,7 @@ namespace CSSoundboard
             InitializeComponent();
 
             //Get file path
-            string projectFolder = Directory.GetCurrentDirectory();
+            projectFolder = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + @"\Programs\Rudi Wagner";
             soundspath = projectFolder + @"\Sounds";
             log += "#Log# Filedirectory: " + soundspath + "\n";
 
@@ -133,7 +136,7 @@ namespace CSSoundboard
             else
             {
                 //Play Sound to VB-Audio (to simulate mic input)
-                var Reader = new NAudio.Wave.Mp3FileReader(soundspath + $"/{btnName}.mp3");
+                Reader = new NAudio.Wave.Mp3FileReader(soundspath + $"/{btnName}.mp3");
                 waveOut = new NAudio.Wave.WaveOut();                            //Player
                 waveOut.PlaybackStopped += PlaybackDevicePlaybackStopped;       //Event Handler
                 waveOut.DeviceNumber = audioOutputID;                           //Device Playback
@@ -143,7 +146,7 @@ namespace CSSoundboard
                 waveOut.Volume = vol;                                           //Set Volume
 
                 //Play Sound to Default Device (to play it to the user)
-                var ReaderClient = new NAudio.Wave.Mp3FileReader(soundspath + $"/{btnName}.mp3");
+                ReaderClient = new NAudio.Wave.Mp3FileReader(soundspath + $"/{btnName}.mp3");
                 waveOutclient = new NAudio.Wave.WaveOut();
                 waveOutclient.Init(ReaderClient);
                 waveOutclient.Volume = vol;
@@ -341,14 +344,18 @@ namespace CSSoundboard
             log += "#Log# Window Refreshed\n";
         }
 
-        private void StopMusic(object sender, RoutedEventArgs e)
+        public void StopMusic(object sender, RoutedEventArgs e)
         {//Stop current playing Sound
             if (alreadyplaying)
             {
                 waveOut.Stop();                                                     //Dispose sound Data to stop Playback
                 waveOutclient.Stop();
-                log += "#Log# Sound stopped\n";
                 alreadyplaying = false;
+                Reader.Dispose();
+                Reader.Close();
+                ReaderClient.Dispose();
+                ReaderClient.Close();
+                log += "#Log# Sound stopped\n";
             }
         }
 
@@ -375,7 +382,7 @@ namespace CSSoundboard
             TextWriter oldOut = Console.Out;
             try
             {
-                ostrm = new FileStream("./log.txt", FileMode.OpenOrCreate, FileAccess.Write);
+                ostrm = new FileStream(projectFolder + "/log.txt", FileMode.OpenOrCreate, FileAccess.Write);
                 writer = new StreamWriter(ostrm);
             }
             catch (Exception e)
@@ -408,6 +415,14 @@ namespace CSSoundboard
         private void Window_Settings(object sender, MouseButtonEventArgs e)
         {
             settings.Show();
+            settings.Left = this.Left;
+            settings.Top = this.Top;
+            settings.Activate();
+        }
+
+        private void OpenSoundsFolder(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", soundspath);
         }
     }
 }

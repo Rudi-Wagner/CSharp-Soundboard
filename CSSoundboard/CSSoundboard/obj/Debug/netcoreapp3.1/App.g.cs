@@ -10,6 +10,7 @@
 //------------------------------------------------------------------------------
 
 using CSSoundboard;
+using NHotkey.Wpf;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -45,7 +46,7 @@ namespace CSSoundboard {
         /// InitializeComponent
         /// </summary>
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "5.0.10.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "7.0.3.0")]
         public void InitializeComponent() {
             
             #line 5 "..\..\..\App.xaml"
@@ -60,7 +61,7 @@ namespace CSSoundboard {
         /// </summary>
         [System.STAThreadAttribute()]
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "5.0.10.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "7.0.3.0")]
         public static void Main() {
             CSSoundboard.App app = new CSSoundboard.App();
             app.InitializeComponent();

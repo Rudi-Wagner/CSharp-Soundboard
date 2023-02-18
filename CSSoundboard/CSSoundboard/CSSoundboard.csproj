@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
@@ -15,16 +15,15 @@
     <None Remove="CloseX.png" />
     <None Remove="Icon.ico" />
     <None Remove="Minimize_.png" />
-    <None Remove="Resources\Minimize_ - Kopieren.png" />
     <None Remove="SettingsO.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MediaToolkit" Version="1.1.0.1" />
-    <PackageReference Include="NAudio" Version="2.0.1" />
+    <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="NHotkey.Wpf" Version="2.1.0" />
-    <PackageReference Include="System.Management" Version="6.0.0" />
-    <PackageReference Include="VideoLibrary" Version="3.1.9" />
+    <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="VideoLibrary" Version="3.2.3" />
   </ItemGroup>
 
   <ItemGroup>
