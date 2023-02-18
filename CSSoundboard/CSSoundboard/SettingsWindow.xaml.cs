@@ -13,15 +13,23 @@ using System.Threading.Tasks;
 
 namespace CSSoundboard
 {
-    /// Interaktionslogik für SettingsWindow.xaml
-    //  Rudi Wagner
-    //  C# Soundboard
+    /// <author>Rudi Wagner</author>
+    /// <summary>
+    /// C# Soundboard SettingsWindow
+    /// </summary>
     public partial class SettingsWindow : Window
     {
+        //Log-String & Main-Window
         private string log = "";
-        private string[] audioOutput = new string[WaveOut.DeviceCount];
-        private string[] alreadySet = { null, null, null, null, null, null, null, null, null, null };
         private MainWindow mainWindow;
+
+        //Output devices
+        private string[] audioOutput = new string[WaveOut.DeviceCount];
+
+        //Hotkey-List
+        private string[] alreadySet = { null, null, null, null, null, null, null, null, null, null };
+        
+        //System-Paths
         private string projectFolder;
         private string soundspath;
 
@@ -201,43 +209,6 @@ namespace CSSoundboard
         }
 
         /// <summary>
-        /// Downloads an MP3 file from the specified URL and updates the download status label.
-        /// </summary>
-        /// <param name="sender">The object that raised the event.</param>
-        /// <param name="e">The event data.</param>
-        /// <remarks>
-        /// This method retrieves the download URL from the `DownloadLinkBox` text box, creates a new `Task` using the `SaveMP3` method with the URL as a parameter, 
-        /// and awaits its completion. Once the `Task` has completed, it updates the download status label with the resulting status message.
-        /// </remarks>
-        private async void Download_Button_Click(object sender, RoutedEventArgs e)
-        {
-            Download_Status.Content = "Loading...";
-            String url = DownloadLinkBox.Text;
-            String status = await Task.Run(() => SaveMP3(url));
-            Download_Status.Content = status;
-            DownloadLinkBox.Text = "Link..";
-        }
-
-        //Window Functions
-        /// <summary>
-        /// Handles the shutdown of the window by logging the event and refreshing data in the main window.
-        /// </summary>
-        /// <param name="sender">The object that raised the event.</param>
-        /// <param name="e">The event data.</param>
-        /// <remarks>
-        /// This method first logs the shutdown event to the `log` variable, then calls the `WriteOutput` method to write the log message to a file.
-        /// It then calls the `RefreshData` method on the `mainWindow` object with `null` arguments to update the main window's data.
-        /// Finally, it hides the current window.
-        /// </remarks>
-        private void Window_Shutdown(object sender, RoutedEventArgs e)
-        {
-            log += "#Settings# Settings Shutdown\n";
-            WriteOutput(log);
-            mainWindow.RefreshData(null, null);
-            this.Hide();
-        }
-
-        /// <summary>
         /// Writes the specified log message to a file at the path "./settingslog.txt".
         /// </summary>
         /// <param name="log">The log message to write.</param>
@@ -266,89 +237,6 @@ namespace CSSoundboard
             Console.SetOut(oldOut);
             writer.Close();
             ostrm.Close();
-        }
-
-        /// <summary>
-        /// Handles the MouseButton event for moving the window by dragging it.
-        /// </summary>
-        /// <param name="sender">The object that raised the event.</param>
-        /// <param name="e">The MouseButtonEventArgs associated with the event.</param>
-        private void Window_Movment(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                if (e.ChangedButton == MouseButton.Left)
-                {
-                    this.DragMove();
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                log += ex.Message + "\n";
-            }
-        }
-
-        //Drag and Drop for the visual Hotkeys
-
-        /// <summary>
-        /// Handles the MouseDown event for the HotkeysList by initiating a Drag and Drop operation.
-        /// </summary>
-        /// <param name="sender">The object that raised the event.</param>
-        /// <param name="e">The MouseButtonEventArgs associated with the event.</param>
-        private void HotkeysList_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (hotkeysList.SelectedItem != null)
-            {
-                DragDrop.DoDragDrop(hotkeysList, hotkeysList.SelectedItem.ToString(), DragDropEffects.Copy);
-            }
-        }
-
-        /// <summary>
-        /// Handles the SelectionChanged event for the HotkeysList by initiating a Drag and Drop operation.
-        /// </summary>
-        /// <param name="sender">The object that raised the event.</param>
-        /// <param name="e">The SelectionChangedEventArgs associated with the event.</param>
-        private void HotkeysList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            mainWindow.StopMusic(null, null);
-            if (hotkeysList.SelectedItem != null)
-            {
-                DragDrop.DoDragDrop(hotkeysList, hotkeysList.SelectedItem.ToString(), DragDropEffects.Copy);
-            }
-        }
-
-        /// <summary>
-        /// Handles the Drop event for the TextBox by copying the filename into the selected TextBox and "activating" the Hotkey.
-        /// </summary>
-        /// <param name="sender">The object that raised the event.</param>
-        /// <param name="e">The DragEventArgs associated with the event.</param>
-        private void TextBox_Drop(object sender, DragEventArgs e)
-        {
-            try
-            {
-                e.Handled = true;
-                TextBox box = sender as TextBox;
-                box.Clear();
-                string dragData = e.Data.GetData(DataFormats.StringFormat).ToString().Replace(".mp3", "");
-                int maxLength = 13;
-                if (dragData.Length < 13)
-                {
-                    maxLength = dragData.Length;
-                }
-
-                if (!ActivateHotkey(box.Name, dragData))
-                {
-                    box.Text = box.Name;
-                    return;
-                }
-                box.Text = box.Name + Environment.NewLine + dragData.Substring(0, maxLength);
-                
-                RedoFilledBoxes();
-                box.IsReadOnly = true;
-            }catch (FileNotFoundException)
-            { 
-                //Nothing
-            }
         }
 
         /// <summary>
@@ -393,16 +281,77 @@ namespace CSSoundboard
             RedoFilledBoxes();
         }
 
+        ////---- Event Handlers ----////
+        //-- Window Handlers --//
         /// <summary>
-        /// Handles the KeyDown event for the specified TextBox instance, preventing writing in the textbox.
+        /// Handles the MouseButton event for moving the window by dragging it.
         /// </summary>
-        /// <param name="sender">The TextBox instance that raised the KeyDown event.</param>
-        /// <param name="e">The KeyEventArgs object that contains the event data.</param>
-        private void Textbox1_KeyDown(object sender, KeyEventArgs e)
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The MouseButtonEventArgs associated with the event.</param>
+        private void Window_Movment(object sender, MouseButtonEventArgs e)
         {
-            e.Handled = true;
+            try
+            {
+                if (e.ChangedButton == MouseButton.Left)
+                {
+                    this.DragMove();
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                log += ex.Message + "\n";
+            }
         }
 
+        /// <summary>
+        /// Handles the shutdown of the window by logging the event and refreshing data in the main window.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event data.</param>
+        /// <remarks>
+        /// This method first logs the shutdown event to the `log` variable, then calls the `WriteOutput` method to write the log message to a file.
+        /// It then calls the `RefreshData` method on the `mainWindow` object with `null` arguments to update the main window's data.
+        /// Finally, it hides the current window.
+        /// </remarks>
+        private void Window_Shutdown(object sender, RoutedEventArgs e)
+        {
+            log += "#Settings# Settings Shutdown\n";
+            WriteOutput(log);
+            mainWindow.RefreshData(null, null);
+            this.Hide();
+        }
+
+        /// <summary>
+        /// Handles the Loaded event for this SettingsWindow instance.
+        /// </summary>
+        /// <param name="sender">The object that raised the Loaded event.</param>
+        /// <param name="e">The RoutedEventArgs object that contains the event data.</param>
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            FillHotkeysList();
+            RedoFilledBoxes();
+        }
+
+        //-- Button Handlers --//
+        /// <summary>
+        /// Downloads an MP3 file from the specified URL and updates the download status label.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event data.</param>
+        /// <remarks>
+        /// This method retrieves the download URL from the `DownloadLinkBox` text box, creates a new `Task` using the `SaveMP3` method with the URL as a parameter, 
+        /// and awaits its completion. Once the `Task` has completed, it updates the download status label with the resulting status message.
+        /// </remarks>
+        private async void Download_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Download_Status.Content = "Loading...";
+            String url = DownloadLinkBox.Text;
+            String status = await Task.Run(() => SaveMP3(url));
+            Download_Status.Content = status;
+            DownloadLinkBox.Text = "Link..";
+        }
+
+        //-- Hotkeys Handlers --//
         /// <summary>
         /// Handles the MouseDoubleClick event for the specified TextBox instance.
         /// </summary>
@@ -422,14 +371,75 @@ namespace CSSoundboard
         }
 
         /// <summary>
-        /// Handles the Loaded event for this SettingsWindow instance.
+        /// Handles the KeyDown event for the specified TextBox instance, preventing writing in the textbox.
         /// </summary>
-        /// <param name="sender">The object that raised the Loaded event.</param>
-        /// <param name="e">The RoutedEventArgs object that contains the event data.</param>
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        /// <param name="sender">The TextBox instance that raised the KeyDown event.</param>
+        /// <param name="e">The KeyEventArgs object that contains the event data.</param>
+        private void Textbox_KeyDown(object sender, KeyEventArgs e)
         {
-            FillHotkeysList();
-            RedoFilledBoxes();
+            e.Handled = true;
+        }
+
+        /// <summary>
+        /// Handles the Drop event for the TextBox by copying the filename into the selected TextBox and "activating" the Hotkey.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The DragEventArgs associated with the event.</param>
+        private void TextBox_Drop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                e.Handled = true;
+                TextBox box = sender as TextBox;
+                box.Clear();
+                string dragData = e.Data.GetData(DataFormats.StringFormat).ToString().Replace(".mp3", "");
+                int maxLength = 13;
+                if (dragData.Length < 13)
+                {
+                    maxLength = dragData.Length;
+                }
+
+                if (!ActivateHotkey(box.Name, dragData))
+                {
+                    box.Text = box.Name;
+                    return;
+                }
+                box.Text = box.Name + Environment.NewLine + dragData.Substring(0, maxLength);
+
+                RedoFilledBoxes();
+                box.IsReadOnly = true;
+            }
+            catch (FileNotFoundException)
+            {
+                //Nothing
+            }
+        }
+
+        /// <summary>
+        /// Handles the SelectionChanged event for the HotkeysList by initiating a Drag and Drop operation.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The SelectionChangedEventArgs associated with the event.</param>
+        private void HotkeysList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            mainWindow.StopMusic(null, null);
+            if (hotkeysList.SelectedItem != null)
+            {
+                DragDrop.DoDragDrop(hotkeysList, hotkeysList.SelectedItem.ToString(), DragDropEffects.Copy);
+            }
+        }
+
+        /// <summary>
+        /// Handles the MouseDown event for the HotkeysList by initiating a Drag and Drop operation.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The MouseButtonEventArgs associated with the event.</param>
+        private void HotkeysList_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (hotkeysList.SelectedItem != null)
+            {
+                DragDrop.DoDragDrop(hotkeysList, hotkeysList.SelectedItem.ToString(), DragDropEffects.Copy);
+            }
         }
     }
 }
