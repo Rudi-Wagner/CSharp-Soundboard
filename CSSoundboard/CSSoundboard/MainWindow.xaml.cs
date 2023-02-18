@@ -40,6 +40,10 @@ namespace CSSoundboard
         private Mp3FileReader ReaderClient;
 
         private float vol = 2.5f;
+
+        /// <summary>
+        /// Initializes a new instance of the MainWindow class.
+        /// </summary>
         public MainWindow()
         {
             log += $"#Log# STARTING {DateTime.Now:HH:mm:ss}\n";
@@ -97,6 +101,16 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Sets the audio device to use for sound playback.
+        /// </summary>
+        /// <param name="selectedDevice">The name of the audio device to use.</param>
+        /// <remarks>
+        /// The function retrieves a list of all active audio playback devices using an instance of the 'MMDeviceEnumerator' class.
+        /// The function cycles through each audio device and compares the name of the device to the provided 'selectedDevice' parameter.
+        /// If the name of the current device starts with the 'selectedDevice' parameter, the function sets the 'audioOutputID' variable to the index of the current device.
+        /// The function also updates the 'log' variable to indicate which audio device is being used.
+        /// </remarks>
         private void SetAudioDevice(string selectedDevice)
         {
             var enumerator = new MMDeviceEnumerator();          //create enumerator
@@ -111,8 +125,19 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Handles button clicks for playing sound files.
+        /// </summary>
+        /// <param name="sender">The button that was clicked.</param>
+        /// <param name="e">The event arguments for the button click.</param>
+        /// <remarks>
+        /// The function stops any currently playing sound by calling the 'StopMusic' function.
+        /// The function then retrieves the name of the sound file associated with the button that was clicked.
+        /// The function updates the UI to show that the sound file is playing.
+        /// The function calls the 'PlaySound' function to play the sound file.
+        /// </remarks>
         private void Button_Click(object sender, RoutedEventArgs e)
-        {//Logic for Button presses
+        {
             StopMusic(null, null);
             if (!alreadyplaying)
             {
@@ -127,8 +152,18 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Plays a sound file with the given button name to the user and to the VB-Audio virtual microphone.
+        /// </summary>
+        /// <param name="btnName">The name of the sound file to play without the file extension.</param>
+        /// <remarks>
+        /// The function checks if the requested sound file exists. If it does not, the function returns without playing the sound.
+        /// The function sets the volume of the sound file to the value stored in the 'vol' variable.
+        /// The function also sets the delay between the start of the function and the start of the sound to the value returned by the 'GetSoundDelay' function.
+        /// The function plays the sound file simultaneously to the VB-Audio virtual microphone and the default sound device of the user.
+        /// </remarks>
         private void PlaySound(string btnName)
-        {//Start Sound 
+        {
             if (!File.Exists(soundspath + $"/{btnName}.mp3"))                     //Check if requested File exists
             {
                 return;
@@ -162,8 +197,15 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Retrieves the Sound Delay value from the TextBox.
+        /// </summary>
+        /// <remarks>
+        /// If the TextBox is empty or contains only whitespace, the function returns 0.
+        /// </remarks>
+        /// <returns>The Sound Delay value as an integer.</returns>
         private int GetSoundDelay()
-        {//Get Sounddelay-Number from the TextBox
+        {
             string delaytxt = delay.Text;                                       //Get TextBox-String
             if (delaytxt.Equals(""))                                            //Check if the String contains something
             {
@@ -175,14 +217,24 @@ namespace CSSoundboard
             return delaytime;
         }
 
+        /// <summary>
+        /// Retrieves the volume number from the slider control and updates the volume field.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event data.</param>
         private void GetVolume(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {//Get Volume-Number from the Slider
+        {
             this.vol = (float)slider.Value / 10;
             volslider.Content = "Volume: " + (this.vol * 10).ToString("0.00");                          //Update Volume-Label
         }
 
+        /// <summary>
+        /// Handles the event when the playback device has stopped playing a sound.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event data.</param>
         private void PlaybackDevicePlaybackStopped(object sender, EventArgs e)
-        {//Manages Playback Stopped
+        {
             btn.Content = btnName;                                              //Change Button Name back
             status.Content = "Playing: ";                                       //Remove current playing sound
             alreadyplaying = false;                                             //Update Variable
@@ -190,6 +242,9 @@ namespace CSSoundboard
             log += $"#Log# Sound: '{btnName}' stopped playing!\n";
         }
 
+        /// <summary>
+        /// Searches for sound files in the 'Sounds' directory and creates buttons for them.
+        /// </summary>
         private void SearchSounds()
         {
             log += "#Log# Searching for Sound-Files\n";
@@ -247,8 +302,16 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Creates a special button with the given variables and adds it to the window.
+        /// This special button has the ability to be pressed by a hotkey (Numpad 0-9)
+        /// </summary>
+        /// <param name="str">The string to use as the button content.</param>
+        /// <param name="row">The row to place the button in on the Grid control.</param>
+        /// <param name="col">The column to place the button in on the Grid control.</param>
+        /// <param name="arrayplacment">The index to use for the button in the btnArray.</param>
         private void CreateAHotkeyButton(string str, int row, int col, int arrayplacment)
-        {//Create a Button with given Variables
+        {
             Button btn = new Button
             {
                 Margin = new Thickness(5),                                      //Set Margin
@@ -274,6 +337,12 @@ namespace CSSoundboard
             log += "#Log# Created Button: " + str + "\n";
         }
 
+        /// <summary>
+        /// Sets the hotkeys for the application.
+        /// </summary>
+        /// <remarks>
+        /// This function adds or replaces hotkeys for stopping the application and clicking on the number keys from 0 to 9 on the number pad.
+        /// </remarks>
         private void SetHotkeys()
         {
             log += "#Log# Set Hotkeys\n";
@@ -289,11 +358,23 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Handles the event when the hotkey for stopping the currently playing sound is pressed.
+        /// By simulating a Buttonpress on the Stop-Button.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments containing information about the hotkey that was pressed.</param>
         private void StopHotkey(object sender, HotkeyEventArgs e)
         {
             Stop.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         }
 
+        /// <summary>
+        /// Handles the event when a registered hotkey is pressed.
+        /// It simulates a Button press to the according Sound-Button.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event data for the hotkey event.</param>
         private void HotkeyClick(object sender, HotkeyEventArgs e)
         {
             for (int i = 0; i < hotkeyBtnArray.Length; i++)
@@ -309,6 +390,14 @@ namespace CSSoundboard
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Creates a new button with the specified label, row, column, and placement in the button array.
+        /// The button is added to the scrollViewerWrapperPanel, and a log entry is created.
+        /// </summary>
+        /// <param name="str">The label to display on the button.</param>
+        /// <param name="row">The row of the grid to place the button in.</param>
+        /// <param name="col">The column of the grid to place the button in.</param>
+        /// <param name="arrayplacment">The index of the button in the button array.</param>
         private void CreateAButton(string str, int row, int col, int arrayplacment)
         {//Create a Button with given Variables
             Button btn = new Button
@@ -332,6 +421,12 @@ namespace CSSoundboard
             log += "#Log# Created Button: " + str + "\n";
         }
 
+        /// <summary>
+        /// Event handler for when the user clicks the "Refresh" button.
+        /// Refreshes all sounds, sets the audio device, and logs the event to the application's log file.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         public void RefreshData(object sender, RoutedEventArgs e)
         {
             //Refresh Button Data
@@ -344,8 +439,14 @@ namespace CSSoundboard
             log += "#Log# Window Refreshed\n";
         }
 
+        /// <summary>
+        /// Event handler for when the user clicks the "Stop" button.
+        /// Stops the currently playing sound, disposes of its data, and logs the event to the application's log file.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         public void StopMusic(object sender, RoutedEventArgs e)
-        {//Stop current playing Sound
+        {
             if (alreadyplaying)
             {
                 waveOut.Stop();                                                     //Dispose sound Data to stop Playback
@@ -359,14 +460,26 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Event handler for previewing text input in a text box.
+        /// Filters out all characters that are not digits or whitespace characters.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private new void PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {//Filter all chars in the TextBox
+        {
             Regex regex = new Regex("^[^0-9\\s]+$");                            //Filtering using Regex
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        /// <summary>
+        /// Event handler for when the user clicks the "Shutdown" button.
+        /// Shuts down the application, closes the settings window, and logs the event to the application's log file.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void Window_Shutdown(object sender, RoutedEventArgs e)
-        {//Shutdown Program
+        {
             waveOut = null;                                                     //Set Variable to null
             waveOutclient = null;
             log += "#Log# System Shutdown\n";
@@ -375,6 +488,10 @@ namespace CSSoundboard
             System.Windows.Application.Current.Shutdown();                      //Shutdown program
         }
 
+        /// <summary>
+        /// Writes the given log message to a text file and redirects the console output to that file.
+        /// </summary>
+        /// <param name="log">The log message to write.</param>
         private void WriteOutput(string log)
         {
             FileStream ostrm;
@@ -387,9 +504,6 @@ namespace CSSoundboard
             }
             catch (Exception e)
             {
-#pragma warning disable IDE0059 // Unnötige Zuweisung eines Werts.
-                log += "Cannot open Redirect.txt for writing";
-#pragma warning restore IDE0059 // Unnötige Zuweisung eines Werts.
                 Console.WriteLine(e.Message);
                 return;
             }
@@ -400,26 +514,50 @@ namespace CSSoundboard
             ostrm.Close();
         }
 
+        /// <summary>
+        /// Event handler for when the user clicks and drags on the application window.
+        /// Allows the user to move the window by dragging it with the left mouse button.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void Window_Movment(object sender, MouseButtonEventArgs e)
-        {//Window movement handler
+        {
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
         }
 
+        /// <summary>
+        /// Event handler for when the user clicks the "Minimize Window" button.
+        /// Minimizes the application window and logs the event to the application's log file.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void Window_Minimize(object sender, MouseButtonEventArgs e)
-        {//Minimze Window
+        {
             myWindow.WindowState = WindowState.Minimized;
             log += "#Log# Window minimized\n";
         }
 
+        /// <summary>
+        /// Event handler for when the settings button is clicked.
+        /// Shows the settings window and positions it relative to the main window.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void Window_Settings(object sender, MouseButtonEventArgs e)
         {
             settings.Show();
-            settings.Left = this.Left;
-            settings.Top = this.Top;
+            settings.Left = this.Left - 20;
+            settings.Top = this.Top - 20;
             settings.Activate();
         }
 
+        /// <summary>
+        /// Event handler for when the user clicks the "Open Sounds Folder" button.
+        /// Opens the Windows Explorer window to the folder containing the application's sound files.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void OpenSoundsFolder(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", soundspath);

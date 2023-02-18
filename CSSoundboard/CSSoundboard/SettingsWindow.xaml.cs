@@ -24,6 +24,11 @@ namespace CSSoundboard
         private MainWindow mainWindow;
         private string projectFolder;
         private string soundspath;
+
+        /// <summary>
+        /// Initializes a new instance of the SettingsWindow class.
+        /// </summary>
+        /// <param name="main">The MainWindow instance to associate with this SettingsWindow instance.</param>
         public SettingsWindow(MainWindow main)
         {
             log += "#Settings# STARTING\n";
@@ -48,6 +53,9 @@ namespace CSSoundboard
             RedoFilledBoxes();
         }
 
+        /// <summary>
+        /// Redoes the filled text boxes based on the files found in the sound path directory.
+        /// </summary>
         private void RedoFilledBoxes()
         {
             TextBox[] boxes = { Hotkey0, Hotkey1, Hotkey2, Hotkey3, Hotkey4, Hotkey5, Hotkey6, Hotkey7, Hotkey8, Hotkey9 };
@@ -94,6 +102,13 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Populates the `hotkeysList` ListBox with the names of the available sound files.
+        /// </summary>
+        /// <remarks>
+        /// This method clears the `hotkeysList` ListBox, then retrieves the names of all sound files with the ".mp3" extension in the "soundspath" directory, and adds them to the ListBox.
+        /// The ListBox items are created by replacing the ".mp3" extension of each file name with an empty string.
+        /// </remarks>
         private void FillHotkeysList()
         {
             hotkeysList.Items.Clear();
@@ -109,11 +124,22 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Returns the selected item of the `ComboAudioDevices` combo box as a string.
+        /// </summary>
+        /// <returns>A string representing the selected item of the `ComboAudioDevices` combo box.</returns>
         internal string GetComboBoxItem()
         {
             return ComboAudioDevices.SelectedItem.ToString();
         }
 
+        /// <summary>
+        /// Populates the `ComboAudioDevices` combo box with the available audio output devices.
+        /// </summary>
+        /// <remarks>
+        /// This method iterates through the `audioOutput` array, which contains the available audio output devices, and adds each device to the `ComboAudioDevices` combo box.
+        /// It also sets the selected item of the combo box to the first device whose name starts with "CABLE Input".
+        /// </remarks>
         private void FillComboAudioDevices()
         {
             for(int i = 0; i < audioOutput.Length; i++)
@@ -126,8 +152,18 @@ namespace CSSoundboard
             }
         }
 
-        
-
+        /// <summary>
+        /// Downloads a video from the specified URL, converts it to an MP3 file, and saves it to disk.
+        /// </summary>
+        /// <param name="VideoURL">The URL of the video to download and convert.</param>
+        /// <returns>A string indicating whether the operation was successful or failed.</returns>
+        /// <remarks>
+        /// This method first logs the download of the specified video to the `log` variable.
+        /// It then retrieves the current project folder, creates a `Sounds` subdirectory within that folder, and sets `SaveToFolder` to that subdirectory.
+        /// The method then retrieves the specified video using the `YouTubeExplode` library, and saves it to disk in `SaveToFolder`.
+        /// The video file is then converted to an MP3 file using the `MediaToolkit` library, and saved to disk.
+        /// Finally, the original video file is deleted from disk, and a status message indicating success or failure is returned.
+        /// </remarks>
         private String SaveMP3(string VideoURL)
         {
             String status = "";
@@ -164,6 +200,15 @@ namespace CSSoundboard
             return status;
         }
 
+        /// <summary>
+        /// Downloads an MP3 file from the specified URL and updates the download status label.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event data.</param>
+        /// <remarks>
+        /// This method retrieves the download URL from the `DownloadLinkBox` text box, creates a new `Task` using the `SaveMP3` method with the URL as a parameter, 
+        /// and awaits its completion. Once the `Task` has completed, it updates the download status label with the resulting status message.
+        /// </remarks>
         private async void Download_Button_Click(object sender, RoutedEventArgs e)
         {
             Download_Status.Content = "Loading...";
@@ -174,14 +219,33 @@ namespace CSSoundboard
         }
 
         //Window Functions
+        /// <summary>
+        /// Handles the shutdown of the window by logging the event and refreshing data in the main window.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event data.</param>
+        /// <remarks>
+        /// This method first logs the shutdown event to the `log` variable, then calls the `WriteOutput` method to write the log message to a file.
+        /// It then calls the `RefreshData` method on the `mainWindow` object with `null` arguments to update the main window's data.
+        /// Finally, it hides the current window.
+        /// </remarks>
         private void Window_Shutdown(object sender, RoutedEventArgs e)
-        {//Shutdown Program
+        {
             log += "#Settings# Settings Shutdown\n";
             WriteOutput(log);
             mainWindow.RefreshData(null, null);
             this.Hide();
         }
 
+        /// <summary>
+        /// Writes the specified log message to a file at the path "./settingslog.txt".
+        /// </summary>
+        /// <param name="log">The log message to write.</param>
+        /// <remarks>
+        /// This function creates a new file at the path "./settingslog.txt" if it does not already exist, or opens it for writing if it does. 
+        /// If an error occurs while attempting to create or open the file, the log message will be updated to include an error message.
+        /// The function then writes the log message to the file, and restores the console output to its original state.
+        /// </remarks>
         private void WriteOutput(string log)
         {
             FileStream ostrm;
@@ -194,9 +258,6 @@ namespace CSSoundboard
             }
             catch (Exception e)
             {
-#pragma warning disable IDE0059 // Unnötige Zuweisung eines Werts.
-                log += "Cannot open Redirect.txt for writing";
-#pragma warning restore IDE0059 // Unnötige Zuweisung eines Werts.
                 Console.WriteLine(e.Message);
                 return;
             }
@@ -207,8 +268,13 @@ namespace CSSoundboard
             ostrm.Close();
         }
 
+        /// <summary>
+        /// Handles the MouseButton event for moving the window by dragging it.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The MouseButtonEventArgs associated with the event.</param>
         private void Window_Movment(object sender, MouseButtonEventArgs e)
-        {//Window movement handler
+        {
             try
             {
                 if (e.ChangedButton == MouseButton.Left)
@@ -224,16 +290,26 @@ namespace CSSoundboard
 
         //Drag and Drop for the visual Hotkeys
 
+        /// <summary>
+        /// Handles the MouseDown event for the HotkeysList by initiating a Drag and Drop operation.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The MouseButtonEventArgs associated with the event.</param>
         private void HotkeysList_MouseDown(object sender, MouseButtonEventArgs e)
-        {//Do Drag and Drop OnClick
+        {
             if (hotkeysList.SelectedItem != null)
             {
                 DragDrop.DoDragDrop(hotkeysList, hotkeysList.SelectedItem.ToString(), DragDropEffects.Copy);
             }
         }
 
+        /// <summary>
+        /// Handles the SelectionChanged event for the HotkeysList by initiating a Drag and Drop operation.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The SelectionChangedEventArgs associated with the event.</param>
         private void HotkeysList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {//Do Drag and Drop OnSelectionChanged
+        {
             mainWindow.StopMusic(null, null);
             if (hotkeysList.SelectedItem != null)
             {
@@ -241,8 +317,13 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Handles the Drop event for the TextBox by copying the filename into the selected TextBox and "activating" the Hotkey.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The DragEventArgs associated with the event.</param>
         private void TextBox_Drop(object sender, DragEventArgs e)
-        {//Copy Filename into the selected TextBox and "Activate" the Hotkey
+        {
             try
             {
                 e.Handled = true;
@@ -270,8 +351,16 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Activates the specified hotkey by updating the filename and reloading the hotkey list and filled boxes.
+        /// </summary>
+        /// <param name="hotkeyNr">The number of the hotkey to activate.</param>
+        /// <param name="fileName">The filename of the audio file associated with the hotkey.</param>
+        /// <returns>
+        ///   <c>true</c> if the hotkey was successfully activated; otherwise, <c>false</c> if the specified file was not found.
+        /// </returns>
         private bool ActivateHotkey(string hotkeyNr, string fileName)
-        {//Update the Filename to set/activate the Hotkeys
+        {
             mainWindow.StopMusic(null, null);
             try {
                 string soundspath = projectFolder + @"\Sounds";
@@ -284,6 +373,11 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Deactivates the specified hotkey by updating the filename and reloading the hotkey list and filled boxes.
+        /// </summary>
+        /// <param name="hotkeyNr">The number of the hotkey to deactivate.</param>
+        /// <param name="fileName">The filename of the audio file associated with the hotkey.</param>
         private void DeactivateHotkey(int hotkeyNr, string fileName)
         {
             mainWindow.StopMusic(null, null);
@@ -299,11 +393,21 @@ namespace CSSoundboard
             RedoFilledBoxes();
         }
 
+        /// <summary>
+        /// Handles the KeyDown event for the specified TextBox instance, preventing writing in the textbox.
+        /// </summary>
+        /// <param name="sender">The TextBox instance that raised the KeyDown event.</param>
+        /// <param name="e">The KeyEventArgs object that contains the event data.</param>
         private void Textbox1_KeyDown(object sender, KeyEventArgs e)
-        {//Prevents writing in the textbox
+        {
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Handles the MouseDoubleClick event for the specified TextBox instance.
+        /// </summary>
+        /// <param name="sender">The TextBox instance that raised the MouseDoubleClick event.</param>
+        /// <param name="e">The MouseButtonEventArgs object that contains the event data.</param>
         private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             TextBox box = sender as TextBox;
@@ -317,6 +421,11 @@ namespace CSSoundboard
             }
         }
 
+        /// <summary>
+        /// Handles the Loaded event for this SettingsWindow instance.
+        /// </summary>
+        /// <param name="sender">The object that raised the Loaded event.</param>
+        /// <param name="e">The RoutedEventArgs object that contains the event data.</param>
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             FillHotkeysList();
