@@ -7,7 +7,8 @@
  
 ## How to Install
  1. Den aktuellsten Installer herunterladen & ausführen.
- 2. Externe Dependency [VB-CABLE Virtual Audio Device](https://vb-audio.com/Cable/) herunterladen und installieren.
+ 2. [.Net 7 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) herunterladen und installieren.
+ 3. Externe Dependency [VB-CABLE Virtual Audio Device](https://vb-audio.com/Cable/) herunterladen und installieren.
 
 ### Audiodevice Setup:
  1. Die Sound-Einstellungen in Windows öffnen.
