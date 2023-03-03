@@ -78,39 +78,6 @@ namespace CSSoundboard
 
             //Find correct output device
             SetAudioDevice(settings.GetComboBoxItem());
-            
-            //Audio Device Error handeling
-            if (audioOutputID == 999)
-            {
-                log += "#Error# Correct Audio Device not found!\n";
-                MessageBoxResult resultAudioDeviceError = MessageBox.Show("It seems like you don't have VB-Cable installed!" +
-                                                        "\n Do you want to install it now?",
-                                                        "Audi Device Error",
-                                                        MessageBoxButton.YesNo,
-                                                        MessageBoxImage.Error);
-
-                if (resultAudioDeviceError == MessageBoxResult.Yes)
-                {//Open Website
-                    System.Diagnostics.Process.Start(new ProcessStartInfo
-                    {
-                        FileName = "https://vb-audio.com/Cable/",
-                        UseShellExecute = true
-                    });
-                    Window_Shutdown(null, null);
-                }
-                if (resultAudioDeviceError == MessageBoxResult.No)
-                {//Continue without Mic-Support handeling
-                    MessageBoxResult resultContinueWithoutMic = MessageBox.Show("Continue without Mic-Support?",
-                                                                             "Audi Device Error",
-                                                                             MessageBoxButton.YesNo,
-                                                                             MessageBoxImage.Warning);
-                    //if yes continue
-                    if (resultContinueWithoutMic == MessageBoxResult.No)
-                    {//Shutdown
-                        Window_Shutdown(null, null);
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -123,13 +90,12 @@ namespace CSSoundboard
         /// If the name of the current device starts with the 'selectedDevice' parameter, the function sets the 'audioOutputID' variable to the index of the current device.
         /// The function also updates the 'log' variable to indicate which audio device is being used.
         /// </remarks>
-        private void SetAudioDevice(string selectedDevice)
+        public void SetAudioDevice(string selectedDevice)
         {
-            var enumerator = new MMDeviceEnumerator();          //create enumerator
-            for (int i = 0; i < WaveOut.DeviceCount; i++)       //cycle trough all audio devices
+            for (int i = -1; i < NAudio.Wave.WaveOut.DeviceCount; i++)
             {
-                audioOutput = "" + enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active)[i];
-                if (audioOutput.StartsWith(selectedDevice))
+                var caps = NAudio.Wave.WaveOut.GetCapabilities(i);
+                if (caps.ProductName.StartsWith(selectedDevice))
                 {
                     log += "#Log# Used Audio Device: " + audioOutput + " ID: " + i + "\n";
                     audioOutputID = i;
@@ -209,35 +175,7 @@ namespace CSSoundboard
         {
             log += "#Log# Searching for Sound-Files\n";
             DirectoryInfo directory = new DirectoryInfo(soundspath);              //Look for Files in Directory
-            if (!directory.Exists)
-            {
-                log += ("#Error# The Sound-Directory could not be found!\n");
-                MessageBoxResult result = MessageBox.Show("It seems like you don't have a 'Sounds' directory!" +
-                                                        "\n The .exe file and the 'Sounds' directory have to be in the same place!" +
-                                                        "\n Do you want to automaticly create a directory in the right spot?",
-                                                        "No directory error",
-                                                        MessageBoxButton.YesNo,
-                                                        MessageBoxImage.Error);
-                if (result == MessageBoxResult.Yes)
-                {//Create directory
-                    System.IO.Directory.CreateDirectory(soundspath);
-                }
-                if (result == MessageBoxResult.No)
-                {//Shutdown
-                    Window_Shutdown(null, null);
-                }
-            }
             files = directory.GetFiles("*.mp3");                                //Get all .mp3 Files
-            //File Error handeling
-            if (files.Length == 0)
-            {
-                log += "#Error# No Sounds were found!\n";
-                MessageBox.Show("It seems like you don't have any MP3 Files in the correct directory!" +
-                                                        "\nYou need to place '.mp3' files in the 'Sounds' directory!",
-                                                        "No files error",
-                                                        MessageBoxButton.OK,
-                                                        MessageBoxImage.Error);
-            }
 
             btnArray = new Button[files.Length];                                //Create Button Array
             int row = 3;
@@ -421,7 +359,7 @@ namespace CSSoundboard
         /// </summary>
         /// <param name="sender">The object that raised the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void Window_Shutdown(object sender, RoutedEventArgs e)
+        public void Window_Shutdown(object sender, RoutedEventArgs e)
         {
             waveOut = null;                                                     //Set Variable to null
             waveOutclient = null;

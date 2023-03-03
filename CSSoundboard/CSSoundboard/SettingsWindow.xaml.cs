@@ -10,6 +10,7 @@ using MediaToolkit;
 using System.Threading;
 using System.Windows.Controls;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace CSSoundboard
 {
@@ -44,13 +45,12 @@ namespace CSSoundboard
             mainWindow = main;
             //Initalize WindowComponents
             InitializeComponent();
-            MMDeviceEnumerator enumerator = new MMDeviceEnumerator();          //create enumerator
-            for (int i = 0; i < WaveOut.DeviceCount; i++)       //cycle trough all audio devices
+
+            for (int i = 0; i < NAudio.Wave.WaveOut.DeviceCount; i++)
             {
-                //Find correct output device
-                string audioOutputName = "" + enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active)[i];
+                var caps = NAudio.Wave.WaveOut.GetCapabilities(i);
                 log += "#Log# Used Audio Device: " + audioOutput + " ID: " + i + "\n";
-                audioOutput[i] = audioOutputName;
+                audioOutput[i] = caps.ProductName;
             }
 
             projectFolder = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + @"\Programs\Rudi Wagner";
@@ -121,14 +121,51 @@ namespace CSSoundboard
         {
             hotkeysList.Items.Clear();
             DirectoryInfo directory = new DirectoryInfo(soundspath);
+                //Check Directory
+                if (!directory.Exists)
+                {
+                    log += ("#Error# The Sound-Directory could not be found!\n");
+                    MessageBoxResult result = MessageBox.Show("It seems like you don't have a 'Sounds' directory!" +
+                                                            "\n Do you want to automaticly create a directory in the right spot?",
+                                                            "No directory error",
+                                                            MessageBoxButton.YesNo,
+                                                            MessageBoxImage.Error);
+                    if (result == MessageBoxResult.Yes)
+                    {//Create directory
+                        System.IO.Directory.CreateDirectory(soundspath);
+                        Process.Start("explorer.exe", soundspath);
+                    }
+                    mainWindow.Close();
+                    return;
+                }
+
             FileInfo[] files = directory.GetFiles("*.mp3");
-            for (int i = 0; i < files.Length; i++)                              //Create Button Loop
+                //No Sounds Error handeling
+                if (files.Length == 0)
+                {
+                    log += "#Error# No Sounds were found!\n";
+                    MessageBoxResult result = MessageBox.Show("It seems like you don't have any MP3 Files in the correct directory!" +
+                                                            "\nYou need to place '.mp3' files in the 'Sounds' directory!",
+                                                            "No files error",
+                                                            MessageBoxButton.OK,
+                                                            MessageBoxImage.Error);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        Process.Start("explorer.exe", soundspath);
+                        return;
+                    }
+                }
+            //Fill List
+            if (files.Length > 0)
             {
-                string content = files[i].Name;
-                if (!content.StartsWith("Hotkey"))
-                { 
-                    hotkeysList.Items.Add(content.Replace(".mp3", ""));
-                }               
+                for (int i = 0; i < files.Length; i++)                              //Create Button Loop
+                {
+                    string content = files[i].Name;
+                    if (!content.StartsWith("Hotkey"))
+                    {
+                        hotkeysList.Items.Add(content.Replace(".mp3", ""));
+                    }
+                }
             }
         }
 
@@ -143,6 +180,7 @@ namespace CSSoundboard
 
         /// <summary>
         /// Populates the `ComboAudioDevices` combo box with the available audio output devices.
+        /// It also throws an error to the user if VB-Cable is not found.
         /// </summary>
         /// <remarks>
         /// This method iterates through the `audioOutput` array, which contains the available audio output devices, and adds each device to the `ComboAudioDevices` combo box.
@@ -150,12 +188,49 @@ namespace CSSoundboard
         /// </remarks>
         private void FillComboAudioDevices()
         {
-            for(int i = 0; i < audioOutput.Length; i++)
+            ComboAudioDevices.SelectedItem = audioOutput[0];
+            bool VBCableFound = false;
+            for (int i = 0; i < audioOutput.Length; i++)
             { 
                 ComboAudioDevices.Items.Add(audioOutput[i]);
                 if (audioOutput[i].StartsWith("CABLE Input"))
                 {
                     ComboAudioDevices.SelectedItem = audioOutput[i];
+                    VBCableFound = true;
+                }
+            }
+            mainWindow.SetAudioDevice(GetComboBoxItem());
+
+            //Audio Device Error handeling
+            if (!VBCableFound)
+            {
+                log += "#Error# Correct Audio Device not found!\n";
+                MessageBoxResult resultAudioDeviceError = MessageBox.Show("It seems like you don't have VB-Cable installed!" +
+                                                        "\n Do you want to install it now?",
+                                                        "Audi Device Error",
+                                                        MessageBoxButton.YesNo,
+                                                        MessageBoxImage.Error);
+
+                if (resultAudioDeviceError == MessageBoxResult.Yes)
+                {//Open Website
+                    System.Diagnostics.Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "https://vb-audio.com/Cable/",
+                        UseShellExecute = true
+                    });
+                    Window_Shutdown(null, null);
+                }
+                if (resultAudioDeviceError == MessageBoxResult.No)
+                {//Continue without Mic-Support handeling
+                    MessageBoxResult resultContinueWithoutMic = MessageBox.Show("Continue without Mic-Support?",
+                                                                             "Audi Device Error",
+                                                                             MessageBoxButton.YesNo,
+                                                                             MessageBoxImage.Warning);
+                    //if yes continue
+                    if (resultContinueWithoutMic == MessageBoxResult.No)
+                    {//Shutdown
+                        Window_Shutdown(null, null);
+                    }
                 }
             }
         }
