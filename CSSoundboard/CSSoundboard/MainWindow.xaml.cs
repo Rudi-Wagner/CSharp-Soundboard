@@ -298,6 +298,11 @@ namespace CSSoundboard
             TextWriter oldOut = Console.Out;
             try
             {
+                if (File.Exists(projectFolder + "/log.txt"))
+                {
+                    File.Delete(projectFolder + "/log.txt");
+                }
+
                 ostrm = new FileStream(projectFolder + "/log.txt", FileMode.OpenOrCreate, FileAccess.Write);
                 writer = new StreamWriter(ostrm);
             }

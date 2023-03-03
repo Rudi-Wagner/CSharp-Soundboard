@@ -299,7 +299,12 @@ namespace CSSoundboard
             TextWriter oldOut = Console.Out;
             try
             {
-                ostrm = new FileStream("./settingslog.txt", FileMode.OpenOrCreate, FileAccess.Write);
+                if (File.Exists(projectFolder + "/settingslog.txt"))
+                {
+                    File.Delete(projectFolder + "/settingslog.txt");
+                }
+
+                ostrm = new FileStream(projectFolder + "/settingslog.txt", FileMode.OpenOrCreate, FileAccess.Write);
                 writer = new StreamWriter(ostrm);
             }
             catch (Exception e)
