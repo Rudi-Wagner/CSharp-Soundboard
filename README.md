@@ -11,14 +11,32 @@
  3. Externe Dependency [VB-CABLE Virtual Audio Device](https://vb-audio.com/Cable/) herunterladen und installieren.
 
 ### Audiodevice Setup:
- 1. Die Sound-Einstellungen in Windows öffnen.
+
+**Windows 10:**
+
+ 1. Die Sound-Einstellungen in Windows öffnen. 
  2. Sicherstellen, dass das richtige Standardeingabegerät ausgewählt ist. 
- 3. Unter dem Standardeingabegerät , die "`Geräteeigenschaften`" öffnen.
- 4. Auf der rechten Seite die "`Zusätzliche Geräteeigenschaften`" öffnen.
- 5. Im neuen Fenster den Tab"`Abhören`" auswählen.
- 6. Bei "`Dieses Gerät als Wiedergabequelle verwenden`" das Häkchen setzen.
+ 3. Unter dem Standardeingabegerät , die "`Geräteeigenschaften`" öffnen. 
+ 4. Auf der rechten Seite die "`Zusätzliche Geräteeigenschaften`" öffnen. 
+ 5. Im neuen Fenster den Tab "`Abhören`" auswählen. 
+ 6. Bei "`Dieses Gerät als Wiedergabequelle verwenden`" das Häkchen setzen. 
  7. Darunter bei "`Wiedergabe von diesem Gerät`" "`CABLE Input (VB-Audio Virtual Cable)`" auswählen.
 ![Setup Screenshot](https://raw.githubusercontent.com/Rudi-Wagner/CSharp-Soundboard/main/Docs/Audiodevice_Setup.PNG)
+
+**Windows 11:**
+
+ 1. Die Sound-Einstellungen in Windows öffnen. 
+ 2. Sicherstellen, dass das richtige Standardeingabegerät ausgewählt ist. 
+ 3. Unter "`Erweitert`" die "`Weitere Soundeinstellungen`" öffnen. 
+ 4. Im neuen Fenster den Tab "`Aufnahme`" auswählen. 
+ 5. Dort das Standardeingabegerät und auswählen.
+ 6. Dann unten rechts die "`Eigenschaften`" öffnen. 
+ 7. Im neuen Fenster den Tab "`Abhören`" auswählen. 
+ 8. Bei "`Dieses Gerät als Wiedergabequelle verwenden`" das Häkchen setzen. 
+ 9. Darunter bei "`Wiedergabe von diesem Gerät`" "`CABLE Input (VB-Audio Virtual Cable)`" auswählen.
+
+![Setup Screenshot](https://raw.githubusercontent.com/Rudi-Wagner/CSharp-Soundboard/main/Docs/Audiodevice_Setup.PNG)
+
 Nachdem das Programm fertig installiert wurde und das Audiodevice Setup gemacht wurde, ist das Soundboard einsatzbereit. 
 
 
